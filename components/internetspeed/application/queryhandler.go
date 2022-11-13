@@ -10,7 +10,7 @@ type InternetSpeedQueryHandler struct {
 	service InternetSpeedApplicationService
 }
 
-func NewHsInternetSpeedQueryHandler(service InternetSpeedApplicationService) shared.QueryHandlerRegistration {
+func NewInternetSpeedQueryHandler(service InternetSpeedApplicationService) *InternetSpeedQueryHandler {
 	return &InternetSpeedQueryHandler{
 		service,
 	}

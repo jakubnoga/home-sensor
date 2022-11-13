@@ -10,10 +10,10 @@ type InternetSpeedApplicationService interface {
 }
 
 type HsInternetSpeedApplicationService struct {
-	adapter ports.InternetSpeedPort
+	adapter ports.CheckInternetSpeedPort
 }
 
-func NewHsInternetSpeedApplicationService(adapter ports.InternetSpeedPort) InternetSpeedApplicationService {
+func NewInternetSpeedApplicationService(adapter ports.CheckInternetSpeedPort) *HsInternetSpeedApplicationService {
 	return &HsInternetSpeedApplicationService{
 		adapter,
 	}
@@ -22,5 +22,3 @@ func NewHsInternetSpeedApplicationService(adapter ports.InternetSpeedPort) Inter
 func (s *HsInternetSpeedApplicationService) CheckInternetSpeed() (domain.InternetSpeed, error) {
 	return s.adapter.CheckInternetSpeed()
 }
-
-

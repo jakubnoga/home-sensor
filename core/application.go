@@ -1,10 +1,14 @@
 package core
 
 import (
-	"fmt"
-	adapters "homesensor/adapters/internetspeed"
+	"homesensor/adapters/speedtest"
 	"homesensor/components/internetspeed/application"
+	"homesensor/core/annotations"
+	"homesensor/core/querybus"
 	"homesensor/shared"
+
+	"go.uber.org/fx"
+	"go.uber.org/zap"
 )
 
 type Application struct{}
@@ -14,18 +18,20 @@ func NewApplication() shared.Application {
 }
 
 func (*Application) Run() {
-	queryBus := NewQueryBus()
-
-	internetSpeedS := application.NewHsInternetSpeedApplicationService(adapters.NewSpeedTestAdapter())
-	internetSpeedQh := application.NewHsInternetSpeedQueryHandler(internetSpeedS)
-
-	queryBus.SetHandler(internetSpeedQh.QueryType(), internetSpeedQh)
-
-	internetSpeed, err := queryBus.Send(internetSpeedQh.QueryType(), nil)
-
-	if err != nil {
-		panic(err)
-	}
-
-	fmt.Printf("%+v\n", internetSpeed)
+	fx.New(
+		fx.Provide(
+			zap.NewExample,
+		),
+		fx.Provide(
+			annotations.AsQueryBus(querybus.NewQueryBus),
+			annotations.AsQueryHandlerRegistration(application.NewInternetSpeedQueryHandler),
+			annotations.AsInternetSpeedApplicationService(application.NewInternetSpeedApplicationService),
+			annotations.AsInternetSpeedPort(speedtest.NewSpeedTestAdapter),
+		),
+		fx.Invoke(func(log *zap.Logger, b shared.QueryBus) {
+			// log.Info("Sending CheckInternetSpeed query")
+			// result, err := b.Send("CheckInternetSpeed", "")
+			// log.Sugar().Infof("CheckInternetSpeed query result: %+v, error: %+v", result, err)
+		}),
+	).Run()
 }

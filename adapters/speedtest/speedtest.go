@@ -1,8 +1,7 @@
-package adapters
+package speedtest
 
 import (
 	"homesensor/components/internetspeed/domain"
-	"homesensor/components/internetspeed/ports"
 	"time"
 
 	"github.com/showwin/speedtest-go/speedtest"
@@ -10,7 +9,7 @@ import (
 
 type SpeedtestAdapter struct{}
 
-func NewSpeedTestAdapter() ports.InternetSpeedPort {
+func NewSpeedTestAdapter() *SpeedtestAdapter {
 	return &SpeedtestAdapter{}
 }
 

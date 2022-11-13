@@ -1,4 +1,4 @@
-package core
+package querybus
 
 import (
 	"fmt"
@@ -6,10 +6,11 @@ import (
 	"testing"
 
 	"github.com/stretchr/testify/assert"
+	"go.uber.org/zap"
 )
 
 func TestSendReturnErrorUnhandledQuery(t *testing.T) {
-	bus := NewQueryBus()
+	bus := NewQueryBus(zap.NewExample())
 	queryType := "no_handler"
 	result, err := bus.Send(queryType, "")
 
@@ -18,7 +19,7 @@ func TestSendReturnErrorUnhandledQuery(t *testing.T) {
 }
 
 func TestSendReturnErrorFromHandler(t *testing.T) {
-	bus := NewQueryBus()
+	bus := NewQueryBus(zap.NewExample())
 	queryType := "test_query"
 	bus.SetHandler(queryType, shared.QueryHandlerFunc(func(payload shared.Query) (shared.Result, error) {
 		return nil, fmt.Errorf("handler returned error")
@@ -31,7 +32,7 @@ func TestSendReturnErrorFromHandler(t *testing.T) {
 }
 
 func TestSendReturnHandlerResult(t *testing.T) {
-	bus := NewQueryBus()
+	bus := NewQueryBus(zap.NewExample())
 	queryType := "test_query"
 
 	bus.SetHandler(queryType, shared.QueryHandlerFunc(func(payload shared.Query) (shared.Result, error) {
@@ -45,7 +46,7 @@ func TestSendReturnHandlerResult(t *testing.T) {
 }
 
 func TestUnsetHandler(t *testing.T) {
-	bus := NewQueryBus()
+	bus := NewQueryBus(zap.NewExample())
 	queryType := "test_query"
 
 	unset := bus.SetHandler(queryType, shared.QueryHandlerFunc(func(payload shared.Query) (shared.Result, error) {

@@ -4,6 +4,6 @@ import (
 	"homesensor/components/internetspeed/domain"
 )
 
-type InternetSpeedPort interface {
+type CheckInternetSpeedPort interface {
 	CheckInternetSpeed() (domain.InternetSpeed, error)
 }
