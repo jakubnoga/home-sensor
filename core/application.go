@@ -1,8 +1,8 @@
 package core
 
 import (
-	"homesensor/adapters/speedtest"
-	"homesensor/components/internetspeed/application"
+	isadapters "homesensor/components/internetspeed/adapters"
+	isapplication "homesensor/components/internetspeed/application"
 	"homesensor/core/annotations"
 	"homesensor/core/querybus"
 	"homesensor/shared"
@@ -24,9 +24,9 @@ func (*Application) Run() {
 		),
 		fx.Provide(
 			annotations.AsQueryBus(querybus.NewQueryBus),
-			annotations.AsQueryHandlerRegistration(application.NewInternetSpeedQueryHandler),
-			annotations.AsInternetSpeedApplicationService(application.NewInternetSpeedApplicationService),
-			annotations.AsInternetSpeedPort(speedtest.NewSpeedTestAdapter),
+			annotations.AsQueryHandlerRegistration(isapplication.NewInternetSpeedQueryHandler),
+			annotations.AsInternetSpeedApplicationService(isapplication.NewInternetSpeedApplicationService),
+			annotations.AsInternetSpeedPort(isadapters.NewSpeedTestAdapter),
 		),
 		fx.Invoke(func(log *zap.Logger, b shared.QueryBus) {
 			// log.Info("Sending CheckInternetSpeed query")

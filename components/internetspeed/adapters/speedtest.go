@@ -1,4 +1,4 @@
-package speedtest
+package adapters
 
 import (
 	"homesensor/components/internetspeed/domain"
